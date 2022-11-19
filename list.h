@@ -7,11 +7,13 @@ class List {
   Node<T> *head;
 public:
   List() { head = nullptr; }
+  Node<T> *get_head() const { return head; }
   void push_front(const T &x);
   void push_back(const T &x);
   bool is_empty() const;
   void pop_front();
   void pop_back();
+  void push_before(const T &x, Node<T> *node);
   template <typename Type>friend std::ostream& operator<<(std::ostream &out, const List<Type> &l);
 };
 
@@ -82,5 +84,23 @@ void List<T>::pop_back() {
     curr = curr->next;
   delete curr->next;
   curr->next = nullptr;
+}
+
+// add an element before the given pointer
+template <typename T>
+void List<T>::push_before(const T &x, Node<T> *node) {
+  if (node == nullptr) {
+    push_back(x);
+    return;
+  }
+  if (node == head) {
+    push_front(x);
+    return;
+  }
+  Node<T> *curr = head;
+  while (curr->next != node) 
+    curr = curr->next;
+  curr->next = new Node<T>(x);
+  curr->next->next = node;
 }
 #endif //_LIST_H_

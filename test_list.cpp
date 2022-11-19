@@ -15,9 +15,11 @@ int main() {
     }
     cout << list << "\n";
   }
-  for (int i = 0; i < 5; i++) {
-    list.pop_back();
-    cout << list << "\n";
+  Node<int> *very_important_node = list.get_head();
+  for (int i = 0; i < 3; i++) {
+    very_important_node = very_important_node->next;
   }
-  list.pop_back();
+  cout << "adding element before " << *very_important_node << "...\n";
+  list.push_before(123, very_important_node);
+  cout << list << "\n";
 }
