@@ -10,6 +10,8 @@ public:
   void push_front(const T &x);
   void push_back(const T &x);
   bool is_empty() const;
+  void pop_front();
+  void pop_back();
   template <typename Type>friend std::ostream& operator<<(std::ostream &out, const List<Type> &l);
 };
 
@@ -53,4 +55,32 @@ void List<T>::push_back(const T &x) {
   curr->next = new Node<T>(x);
 }
 
+// remove the first element
+template <typename T>
+void List<T>::pop_front() {
+  if (is_empty()) {
+    return;
+  }
+  Node<T> *new_head = head->next;
+  delete head;
+  head = new_head;
+}
+
+// remove the last element
+template <typename T>
+void List<T>::pop_back() {
+  if (is_empty()) {
+    return;
+  }
+  if (head->next == nullptr) { // only one element => should delete head
+    delete head;
+    head = nullptr;
+    return;
+  }
+  Node<T> *curr = head;
+  while (curr->next->next != nullptr) 
+    curr = curr->next;
+  delete curr->next;
+  curr->next = nullptr;
+}
 #endif //_LIST_H_

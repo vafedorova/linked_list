@@ -3,16 +3,21 @@
 
 using namespace std;
 int main() {
-  List<int> a;
-  for (int i = 0; i < 10; i++) {
+  List<int> list;
+  for (int i = 0; i < 5; i++) {
     int x;
     cin >> x;
     if (i % 2 == 0) {
-      a.push_front(x);
+      list.push_front(x);
     }
     else {
-      a.push_back(x);
+      list.push_back(x);
     }
-    cout << a << "\n";
+    cout << list << "\n";
   }
+  for (int i = 0; i < 5; i++) {
+    list.pop_back();
+    cout << list << "\n";
+  }
+  list.pop_back();
 }
