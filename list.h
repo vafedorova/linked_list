@@ -14,6 +14,11 @@ public:
   void pop_front();
   void pop_back();
   void push_before(const T &x, Node<T> *node);
+  void pop_by_pointer(const Node<T> *node);
+  const Node<T> *find(const T &value) const;
+  void pop_by_value(const T &value);
+  List<T> operator+(const List<T> &other) const;
+  
   template <typename Type>friend std::ostream& operator<<(std::ostream &out, const List<Type> &l);
 };
 
@@ -98,9 +103,66 @@ void List<T>::push_before(const T &x, Node<T> *node) {
     return;
   }
   Node<T> *curr = head;
-  while (curr->next != node) 
+  while (curr->next != node) {
     curr = curr->next;
+    if (curr == nullptr) 
+      push_back(x); // if node wasn't found, push x to the end of the list
+  } 
   curr->next = new Node<T>(x);
   curr->next->next = node;
+}
+
+// delete an element by the given pointer 
+template <typename T>
+void List<T>::pop_by_pointer(const Node<T> *node_to_delete) {
+  if (node_to_delete == nullptr || head == nullptr) {
+    return;
+  }
+  if (node_to_delete == head) {
+    pop_front();
+    return;
+  
+  }
+  Node<T> *curr = head;
+  while (curr->next != node_to_delete) {
+    curr = curr->next;
+    if (curr == nullptr)
+      return;
+  }
+  curr->next = node_to_delete->next;
+  delete node_to_delete;
+}
+
+// find an element by value
+template <typename T>
+const Node<T> *List<T>::find(const T &value) const{
+  Node<T> *curr = head;
+  while (curr != nullptr && curr->data != value) {
+    curr = curr->next;
+  }
+  return curr;
+}
+
+// pop by value
+template <typename T>
+void List<T>::pop_by_value(const T &value) {
+  pop_by_pointer(find(value));
+}
+
+// concatanate lists
+template <typename T>
+List<T> List<T>::operator+(const List<T> &other) const {
+  List<T> result;
+  const Node<T> *curr = head;
+  while (curr != nullptr) {
+    result.push_back(curr->data); 
+    curr = curr->next;
+  }
+  curr = other.get_head();
+  while (curr != nullptr) {
+    result.push_back(curr->data);
+    curr = curr->next;
+  }
+  return result;
 }
 #endif //_LIST_H_
